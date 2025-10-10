@@ -1,0 +1,14 @@
+*.exe
+.git
+.gitignore
+README.md
+*.dll
+*.so
+*.dylib
+.env
+.env.*
+*.md
+.vscode
+.idea
+*.test
+coverage.*
