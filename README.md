@@ -38,7 +38,7 @@ go build -o records
 
 ```bash
 docker build -t records .
-docker run -p 8080:8080 records
+docker run -p 7002:7002 records
 ```
 
 ## Usage
