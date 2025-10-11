@@ -11,6 +11,8 @@ import (
 
 func main() {
 
+	log.Println("Welcome to records!")
+
 	ctx := context.Background()
 	err, cfg := config.NewConfig()
 	if err != nil {
