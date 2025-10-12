@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag records europe-north2-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/erst/records:${{ github.sha }}
+      run: docker build --file Dockerfile --tag europe-north2-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/erst/records:${{ github.sha }} .
 
     - name: Push Docker image
       run: docker push europe-north2-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/erst/records:${{ github.sha }}
