@@ -20,7 +20,7 @@ jobs:
     - uses: 'google-github-actions/auth@v3'
       name: Authenticate Google Cloud
       with:
-        project_id: 'records'
+        project_id: ${{ secrets.GCLOUD_PROJECT_ID }}
         workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
         service_account: records@quixotic-moment-473715-c2.iam.gserviceaccount.com
 
