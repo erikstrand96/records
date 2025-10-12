@@ -24,6 +24,9 @@ jobs:
         workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
         service_account: records@quixotic-moment-473715-c2.iam.gserviceaccount.com
 
+    - name: Gcloud login
+      run: gcloud auth login
+  
     - name: Authenticate docker to gcloud
       run: gcloud auth configure-docker europe-north2-docker.pkg.dev
     
