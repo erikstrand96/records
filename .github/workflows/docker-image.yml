@@ -27,8 +27,8 @@ jobs:
     #- name: Gcloud login
     #  run: gcloud auth login
   
-    - name: Authenticate docker to gcloud
-      run: gcloud auth configure-docker europe-north2-docker.pkg.dev
+    #- name: Authenticate docker to gcloud
+    #  run: gcloud auth configure-docker europe-north2-docker.pkg.dev
     
     - name: Build the Docker image
       run: docker build --file Dockerfile --tag europe-north2-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/erst/records:${{ github.sha }} .
