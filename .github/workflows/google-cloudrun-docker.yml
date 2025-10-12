@@ -32,7 +32,7 @@ name: 'Build and Deploy to Cloud Run'
 on:
   push:
     branches:
-      - '"master"'
+      - master
 
 env:
   PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
