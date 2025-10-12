@@ -23,6 +23,9 @@ jobs:
         project_id: 'records'
         workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
         service_account: records@quixotic-moment-473715-c2.iam.gserviceaccount.com
+
+    - name: Authenticate docker to gcloud
+      run: gcloud auth configure-docker europe-north2-docker.pkg.dev
     
     - name: Build the Docker image
       run: docker build --file Dockerfile --tag europe-north2-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/erst/records:${{ github.sha }} .
