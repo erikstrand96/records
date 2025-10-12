@@ -38,7 +38,7 @@ env:
   PROJECT_ID: 'quixotic-moment-473715-c2' # TODO: update to your Google Cloud project ID
   REGION: 'europe-north2' # TODO: update to your region
   SERVICE: 'records' # TODO: update to your service name
-  WORKLOAD_IDENTITY_PROVIDER: 'projects/938726542737/locations/global/workloadIdentityPools/github/providers/my-repo' # TODO: update to your workload identity provider
+  WORKLOAD_IDENTITY_PROVIDER: 'projects/938726542737/locations/global/workloadIdentityPools/githib-actions-pool/providers/github-actions'
 
 jobs:
   deploy:
