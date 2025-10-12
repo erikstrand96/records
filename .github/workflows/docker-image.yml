@@ -14,8 +14,8 @@ jobs:
 
     - uses: actions/checkout@v4
     
-    - name: Authenticate Google Cloud
     - uses: 'google-github-actions/auth@v3'
+      name: Authenticate Google Cloud
       with:
         project_id: 'records'
         workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }} # "projects/123456789/locations/global/workloadIdentityPools/github/providers/my-repo"
