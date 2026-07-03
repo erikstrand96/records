@@ -5,9 +5,9 @@ type AppConfig struct {
 	Port int
 }
 
-func NewConfig() (error, AppConfig) {
+func NewConfig() (AppConfig, error) {
 
 	cfg := AppConfig{Host: "0.0.0.0", Port: 7002}
-	return nil, cfg
+	return cfg, nil
 
 }
