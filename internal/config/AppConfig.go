@@ -2,12 +2,12 @@ package config
 
 type AppConfig struct {
 	Host string
-	Port int
+	Port string
 }
 
-func NewConfig() (AppConfig, error) {
+func NewConfig(host string, port string) (AppConfig, error) {
 
-	cfg := AppConfig{Host: "0.0.0.0", Port: 7002}
+	cfg := AppConfig{Host: host, Port: port}
 	return cfg, nil
 
 }

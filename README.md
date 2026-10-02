@@ -27,18 +27,20 @@ git clone https://github.com/erikstrand96/records.git
 cd records
 ```
 
-### Build and Run with Go
+### Run Locally with Go
+
+Default host 0.0.0.0
+Default port 8080
 
 ```bash
-go build -o records
-./records
+HOST=hostaddress-here PORT=port-here go run .
 ```
 
 ### Build and Run with Docker
 
 ```bash
 docker build -t records .
-docker run -p 7002:7002 records
+docker run -p PORT:7002 records
 ```
 
 ## Usage

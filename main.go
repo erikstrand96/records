@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"os/signal"
 	"records/internal/config"
 	"syscall"
@@ -15,27 +16,30 @@ import (
 
 func main() {
 
-	log.Println("Welcome to records!")
-
 	// Cancel the context when an interrupt/terminate signal arrives so we can
 	// shut the server down gracefully.
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 
-	cfg, err := config.NewConfig()
+	host := os.Getenv("HOST")
+	if host == "" {
+		host = "0.0.0.0"
+	}
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	cfg, err := config.NewConfig(host, port)
 	if err != nil {
 		log.Fatalf("Could not create AppConfig: %v", err)
 	}
 
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", func(writer http.ResponseWriter, r *http.Request) {
-		log.Print(r.Pattern)
-		writer.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(writer).Encode(map[string]string{"message": "Hello World!"})
-	})
+	addr := fmt.Sprintf("%s:%s", cfg.Host, cfg.Port)
 
-	addr := fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)
-	srv := http.Server{Addr: addr, Handler: mux}
+	router := createRouter()
+	srv := http.Server{Addr: addr, Handler: router}
 
 	// Run the server in a goroutine so main can wait on the shutdown signal.
 	go func() {
@@ -54,4 +58,20 @@ func main() {
 	if err := srv.Shutdown(shutdownCtx); err != nil {
 		log.Printf("Error during shutdown: %v", err)
 	}
+}
+
+func createRouter() *http.ServeMux {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", handleRoot)
+	return mux
+}
+
+func handleRoot(writer http.ResponseWriter, _ *http.Request) {
+	setContentTypeHeader(writer)
+	_ = json.NewEncoder(writer).Encode(map[string]string{"message": "Hello, this is an application where I keep a collection of all my vinyl records!"})
+}
+
+func setContentTypeHeader(writer http.ResponseWriter) {
+	writer.Header().Set("Content-Type", "application/json")
+
 }
