@@ -20,6 +20,6 @@ COPY --from=builder /usr/local/bin/records .
 
 USER appuser
 
-EXPOSE 7002
+EXPOSE 8080
 
 CMD ["./records"]
