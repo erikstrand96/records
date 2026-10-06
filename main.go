@@ -26,7 +26,7 @@ func main() {
 		host = "0.0.0.0"
 	}
 
-	port := os.Getenv("PORT")
+	port := os.Getenv("RECORDS_PORT")
 	if port == "" {
 		port = "8080"
 	}

@@ -32,15 +32,17 @@ cd records
 Default host 0.0.0.0
 Default port 8080
 
+Port can be changed with env var RECORDS_PORT
+
 ```bash
-HOST=hostaddress-here PORT=port-here go run .
+go run .
 ```
 
 ### Build and Run with Docker
 
 ```bash
 docker build -t records .
-docker run -p PORT:7002 records
+docker run -p 8080:8080 records
 ```
 
 ## Usage
