@@ -18,6 +18,8 @@ A Go-based application for managing and storing information about your vinyl rec
 ### Prerequisites
 
 - [Go](https://golang.org/dl/) (latest version recommended)
+
+### Optional
 - [Docker](https://www.docker.com/get-started)
 
 ### Clone the Repository
