@@ -21,6 +21,9 @@ jobs:
       contents: read #Required when GH token is used to authenticate with private repo
 
     steps:
+      -  name: install azure cli
+         run: curl -fsSL 'https://azurecliprod.blob.core.windows.net/$root/deb_install.sh' | sudo bash
+    
       - name: Checkout to the branch
         uses: actions/checkout@v2
 
