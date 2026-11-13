@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS records (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	title TEXT NOT NULL,
+	artist TEXT NOT NULL,
+	year INTEGER,
+	genre TEXT,
+	notes TEXT
+);

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -10,6 +11,7 @@ import (
 	"os"
 	"os/signal"
 	"records/internal/config"
+	"records/internal/database"
 	"syscall"
 	"time"
 )
@@ -31,14 +33,26 @@ func main() {
 		port = "8080"
 	}
 
-	cfg, err := config.NewConfig(host, port)
+	dbPath := os.Getenv("RECORDS_DB_PATH")
+	if dbPath == "" {
+		dbPath = "records.db"
+	}
+
+	cfg, err := config.NewConfig(host, port, dbPath)
 	if err != nil {
 		log.Fatalf("Could not create AppConfig: %v", err)
 	}
 
+	// Open the SQLite database and create the schema.
+	db, err := database.Open(cfg.DBPath)
+	if err != nil {
+		log.Fatalf("Could not open database: %v", err)
+	}
+	defer db.Close()
+
 	addr := fmt.Sprintf("%s:%s", cfg.Host, cfg.Port)
 
-	router := createRouter()
+	router := createRouter(db)
 	srv := http.Server{Addr: addr, Handler: router}
 
 	// Run the server in a goroutine so main can wait on the shutdown signal.
@@ -60,7 +74,7 @@ func main() {
 	}
 }
 
-func createRouter() *http.ServeMux {
+func createRouter(db *sql.DB) *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", handleRoot)
 	return mux

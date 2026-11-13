@@ -1,4 +1,4 @@
-FROM golang:1.25.2-alpine AS builder
+FROM golang:1.26-alpine AS builder
 WORKDIR /usr/src/app
 
 
@@ -17,6 +17,7 @@ RUN adduser -D -u 1000 appuser
 WORKDIR /home/appuser
 
 COPY --from=builder /usr/local/bin/records .
+COPY internal/database/schema ./internal/database/schema
 
 USER appuser
 

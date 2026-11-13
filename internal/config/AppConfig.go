@@ -1,13 +1,14 @@
 package config
 
 type AppConfig struct {
-	Host string
-	Port string
+	Host   string
+	Port   string
+	DBPath string
 }
 
-func NewConfig(host string, port string) (AppConfig, error) {
+func NewConfig(host, port, dbPath string) (AppConfig, error) {
 
-	cfg := AppConfig{Host: host, Port: port}
+	cfg := AppConfig{Host: host, Port: port, DBPath: dbPath}
 	return cfg, nil
 
 }

@@ -1,0 +1,15 @@
+name: records
+
+services:
+    records:
+        build:
+            dockerfile: Dockerfile
+            context: .
+        ports:
+            - "56473:8080"
+        volumes:
+            - records_data:/home/appuser
+
+volumes:
+    records_data:
+
