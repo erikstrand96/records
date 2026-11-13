@@ -27,5 +27,5 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Push image
-      run: docker push "$IMAGE_TAG"
+      run: docker push $IMAGE_TAG
       
