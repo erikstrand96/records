@@ -12,12 +12,14 @@ jobs:
 
     runs-on: ubuntu-latest
     environment: test
+    env:
+      IMAGE_TAG: erikstrand/records:$GITHUB_SHA
 
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
       run: |
-        export IMAGE_TAG=erikstrand/records:$GITHUB_SHA
+        export 
         docker build . --file Dockerfile --tag "$IMAGE_TAG"
 
     - name: Log in to Docker Hub
@@ -27,5 +29,5 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Push image
-      run: docker push $IMAGE_TAG
+      run: docker push "$IMAGE_TAG"
       
