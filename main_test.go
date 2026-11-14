@@ -32,20 +32,6 @@ func setupTestDB(t *testing.T) *sql.DB {
 	return db
 }
 
-func TestHandleRoot(t *testing.T) {
-	req := httptest.NewRequest(http.MethodGet, "/", nil)
-	rec := httptest.NewRecorder()
-
-	handleRoot(rec, req)
-
-	if rec.Code != http.StatusOK {
-		t.Errorf("expected status %d, got %d", http.StatusOK, rec.Code)
-	}
-	if rec.Header().Get("Content-Type") != "application/json" {
-		t.Errorf("expected Content-Type application/json, got %s", rec.Header().Get("Content-Type"))
-	}
-}
-
 func TestGetAllRecordsSuccess(t *testing.T) {
 	db := setupTestDB(t)
 	defer db.Close()

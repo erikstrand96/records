@@ -2,17 +2,15 @@ package main
 
 import (
 	"context"
-	"database/sql"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
+	"records/internal"
 	"records/internal/config"
 	"records/internal/database"
-	"records/internal/models"
 	"syscall"
 	"time"
 )
@@ -53,7 +51,9 @@ func main() {
 
 	addr := fmt.Sprintf("%s:%s", cfg.Host, cfg.Port)
 
-	router := createRouter(db)
+	s := internal.Server{Db: db}
+
+	router := s.CreateRouter(db)
 	srv := http.Server{Addr: addr, Handler: router}
 
 	// Run the server in a goroutine so main can wait on the shutdown signal.
@@ -73,74 +73,4 @@ func main() {
 	if err := srv.Shutdown(shutdownCtx); err != nil {
 		log.Printf("Error during shutdown: %v", err)
 	}
-}
-
-func createRouter(db *sql.DB) *http.ServeMux {
-	mux := http.NewServeMux()
-	mux.HandleFunc("GET /", handleRoot)
-
-	mux.HandleFunc("GET /records", func(w http.ResponseWriter, r *http.Request) {
-		getAllRecords(w, r, db)
-	})
-	return mux
-}
-
-func handleRoot(writer http.ResponseWriter, _ *http.Request) {
-	setContentTypeJSON(writer)
-	_ = json.NewEncoder(writer).Encode(map[string]string{
-		"message": "Hello, this is an application where I keep a collection of all my vinyl records!"})
-}
-
-func getAllRecords(writer http.ResponseWriter, r *http.Request, db *sql.DB) {
-	rows, err := db.Query("select id, title, artist, year, genre, notes from records")
-	if err != nil {
-		log.Printf("error querying records: %v\n", err)
-		prob := models.NewProblemDetails(http.StatusInternalServerError, "Failed to query records from database").
-			WithInstance(r.URL.Path)
-		_ = prob.Write(writer)
-		return
-	}
-
-	defer func(rows *sql.Rows) {
-		err := rows.Close()
-		if err != nil {
-			log.Printf("error closing database connection: %v\n", err)
-		}
-	}(rows)
-
-	var records []models.Record
-	for rows.Next() {
-		var rec models.Record
-		if err := rows.Scan(&rec.ID, &rec.Title, &rec.Artist, &rec.Year, &rec.Genre, &rec.Notes); err != nil {
-			log.Printf("error scanning record: %v\n", err)
-			prob := models.NewProblemDetails(http.StatusInternalServerError, "Failed to read record").
-				WithInstance(r.URL.Path)
-			_ = prob.Write(writer)
-			return
-		}
-		records = append(records, rec)
-	}
-
-	if err := rows.Err(); err != nil {
-		log.Printf("error iterating records: %v\n", err)
-		prob := models.NewProblemDetails(http.StatusInternalServerError, "Error iterating records").
-			WithInstance(r.URL.Path)
-		_ = prob.Write(writer)
-		return
-	}
-
-	if records == nil {
-		records = []models.Record{}
-	}
-
-	setContentTypeJSON(writer)
-	_ = json.NewEncoder(writer).Encode(records)
-}
-
-func setContentTypeJSON(writer http.ResponseWriter) {
-	writer.Header().Set("Content-Type", "application/json")
-}
-
-func setContentTypeProblemJson(w http.ResponseWriter) {
-	w.Header().Set("Content-Type", models.ContentTypeProblemJSON)
 }
