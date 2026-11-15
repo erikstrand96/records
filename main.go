@@ -53,7 +53,7 @@ func main() {
 
 	s := internal.Server{Db: db}
 
-	router := s.CreateRouter(db)
+	router := s.CreateHandler(db)
 	srv := http.Server{Addr: addr, Handler: router}
 
 	// Run the server in a goroutine so main can wait on the shutdown signal.
