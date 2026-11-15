@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -50,7 +51,7 @@ func Open(dbPath string) (*sql.DB, error) {
 		return nil, fmt.Errorf("creating migrator: %w", err)
 	}
 
-	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+	if err := m.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
 		db.Close()
 		return nil, fmt.Errorf("running migrations: %w", err)
 	}
